@@ -31,8 +31,13 @@ Snippets from the app
 ![image](https://github.com/Kriz-JayBrazil/AquiduanaSP/assets/151418580/1db76e9d-ce84-433d-85fb-17b3177d4818)
 
 **Collaborators**
-1Lima, W.E.,  2Souza, C.F.S., 3Markwith, H.S., Paul, J.I., 4Souza, J.C.S
-1Undergraduate student of the Biological Sciences course at the Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS 
-2 Master's student at the Federal University of Uberlândia, PPGCV - Postgraduate Program in Veterinary Sciences - FAMEV – UFU 
-3 Prof. Holder, Florida Atlântica University – FAU, FL, USA 
-4 Prof. Holder, Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS
+
+Lima, W.E.,  
+Souza, C.F.S., 
+Markwith, H.S., 
+Paul, J.I., 
+Souza, J.C.S
+Undergraduate student of the Biological Sciences course at the Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS 
+Master's student at the Federal University of Uberlândia, PPGCV - Postgraduate Program in Veterinary Sciences - FAMEV – UFU 
+Prof. Holder, Florida Atlântica University – FAU, FL, USA 
+Prof. Holder, Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS
