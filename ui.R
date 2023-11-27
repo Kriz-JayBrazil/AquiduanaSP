@@ -1,8 +1,17 @@
+     ui <- dashboardPage(
+  dashboardHeader(title = "AquiduanaSpeciesApp"),
+  dashboardSidebar(
+    sidebarMenu(
       menuItem("Maps", tabName = "maps", icon = icon("globe")),
       menuItem("Visualizations", tabName = "visualizations", icon = icon("chart-bar")),
       menuItem("Statistical Inferences", tabName = "stats", icon = icon("table"))
-
-      #Map tab 1
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      # Maps Tab 1
+      tabItem(tabName = "maps",
+              tabsetPanel(
                 tabPanel("Map 1",
               titlePanel("Map Interaction: Forage by Site"),
               sidebarLayout(
