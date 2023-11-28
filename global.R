@@ -1,4 +1,3 @@
-
 library(shiny)
 library(shinydashboard)
 library(shinythemes)
@@ -50,5 +49,3 @@ speciesNames <- names(brazil)[!(names(brazil) %in% c("piscivorous", "omnivorous"
                                                      "insectivorous", "herbivore", "granivore", 
                                                      "frugivorous", "detritivore", "carnivore", 
                                                      "Long", "Lat", "SITES", "richness"))]
-
-# Define UI
