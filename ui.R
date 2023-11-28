@@ -1,4 +1,4 @@
-     ui <- dashboardPage(
+ui <- dashboardPage(
   dashboardHeader(title = "AquiduanaSpeciesApp"),
   dashboardSidebar(
     sidebarMenu(
@@ -176,10 +176,6 @@
       tabItem(tabName = "stats",
               fluidPage(
               tabsetPanel(
-                tabPanel("Temporal Trends", 
-                titlePanel("Aquiduana Species Time Series Plot"),
-                plotOutput("timeSeriesPlot")),
-                
               tabPanel("ANOVA",
                 titlePanel("Field Guild Observations Analysis by Site"),
                 sidebarLayout(
@@ -202,7 +198,7 @@
                
                sidebarLayout(
                  sidebarPanel(
-                   selectInput("analysisType", "Select Analysis Type:", 
+                   selectInput("SpeciesAnalysisType", "Select Analysis Type:", 
                                choices = c("GLM Poisson Analysis")),
                    selectInput("selectedSpecies", "Select Species for Analysis:", 
                                choices = NULL)  # Initialize with no species options
@@ -220,15 +216,15 @@
                
                sidebarLayout(
                  sidebarPanel(
-                   selectInput("analysisType", "Select Analysis Type:", 
+                   selectInput("GuildAnalysisType", "Select Analysis Type:", 
                                choices = c("GLM Poisson Analysis")),
                    selectInput("selectedFeedingHabit", "Select Feeding Habit for Analysis:", 
                                choices = NULL)  # Initialize with no habit options
                  ),
                  mainPanel(
-                   plotOutput("GUildSpGLMplot"),
-                   verbatimTextOutput("GuildSpGLMtext"),
-                   tableOutput("GuildSpGLMtable")  # Add this line for table display
+                   plotOutput("GuildSpplot"),
+                   verbatimTextOutput("GuildSptext"),
+                   tableOutput("GuildSptable")  # Add this line for table display
                  )
     )
   ),
