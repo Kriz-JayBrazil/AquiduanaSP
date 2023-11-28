@@ -370,18 +370,6 @@ server <- function(input, output, session) {
     })
     
   # Code for Statistical Inferences
-#TimeseriesPlot
-    output$timeSeriesPlot <- renderPlot({
-      aggregated_data <- data %>%
-        group_by(MYear) %>%
-        summarise(Count = n(), .groups = 'drop')
-      
-      ggplot(aggregated_data, aes(x=MYear, y=Count)) +
-        geom_line() +
-        scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
-        theme_minimal() +
-        labs(x="Date", y="Number of Observations", title="Species Observations Over Time")
-    })
 
 #ANOVA
       observeEvent(input$analysisType, {
@@ -424,16 +412,16 @@ server <- function(input, output, session) {
         updateSelectInput(session, "selectedSpecies", choices = species_choices)
       })
       
-      observeEvent(input$analysisType, {
-        if(input$analysisType == "GLM Poisson Analysis") {
-          glm_fit <- reactive({
+      observeEvent(input$SpeciesAnalysisType, {
+        if(input$SpeciesAnalysisType == "GLM Poisson Analysis") {
+          species_glm_fit <- reactive({
             glm(Count ~ SITES, family = poisson(link = "log"), data = long_data[long_data$Species == input$selectedSpecies,])
           })
           
           output$SPGLMtext <- renderText({
-            glm_summary <- summary(glm_fit())
-            p_value <- coef(glm_summary)[,4]  # Extract p-values for the predictors
-            output_text <- capture.output(glm_summary)
+            species_glm_summary <- summary(species_glm_fit())
+            p_value <- coef(species_glm_summary)[,4]  # Extract p-values for the predictors
+            output_text <- capture.output(species_glm_summary)
             output_text <- c(output_text, paste("P-values for the predictors:", paste(p_value, collapse = ", ")))
             paste(output_text, collapse = "\n")
           })
@@ -454,14 +442,19 @@ server <- function(input, output, session) {
       # Table output
       output$SPGLMtable <- renderTable({
         req(input$selectedSpecies)  # Ensure that a species is selected
-        if(input$analysisType == "GLM Poisson Analysis" && exists("glm_fit")) {
-          glm_summary <- summary(glm_fit())
-          anova_table <- as.data.frame(glm_summary[[1]])  # Convert the ANOVA table to a data frame
-          anova_table$P_Value <- coef(glm_summary)[,4]  # Add the p-values
-          anova_table
+        if(input$analysisType == "GLM Poisson Analysis") {
+          tryCatch({
+            species_glm_summary <- summary(species_glm_fit())
+            anova_table <- as.data.frame(species_glm_summary$coefficients)  # Convert the coefficients table to a data frame
+            anova_table$P_Value <- coef(species_glm_summary)[,4]  # Add the p-values
+            anova_table
+          }, error = function(e) {
+            # Return a data frame with the error message
+            return(data.frame(Error = as.character(e$message)))
+          })
         }
       })
-      
+       
       
 #Guild GLM
 
@@ -471,16 +464,17 @@ observe({
   updateSelectInput(session, "selectedFeedingHabit", choices = habit_choices)
 })
 
+observeEvent(input$GuildAnalysisType, {
 # GLM Poisson Analysis
-glm_fit <- reactive({
+guild_glm_fit <- reactive({
   req(input$selectedFeedingHabit)
   glm(Count ~ SITES, family = poisson(link = "log"), data = short_data[short_data$FeedingHabit == input$selectedFeedingHabit,])
 })
 
 # Display GLM summary text
-output$GuildSpGLMtext <- renderText({
-  req(glm_fit())
-  glm_summary <- summary(glm_fit())
+output$GuildSptext <- renderText({
+  req(guild_glm_fit())
+  glm_summary <- summary(guild_glm_fit())
   p_value <- coef(glm_summary)[,4]
   output_text <- capture.output(glm_summary)
   output_text <- c(output_text, paste("P-values for the predictors:", paste(p_value, collapse = ", ")))
@@ -488,7 +482,7 @@ output$GuildSpGLMtext <- renderText({
 })
 
 # Plot output for GLM Poisson Analysis
-output$GUildSpGLMplot <- renderPlot({
+output$GuildSpplot <- renderPlot({
   req(input$selectedFeedingHabit)
   current_data <- short_data[short_data$FeedingHabit == input$selectedFeedingHabit,]
   ggplot(current_data, aes(x = SITES, y = Count, fill = SITES)) +
@@ -500,10 +494,13 @@ output$GUildSpGLMplot <- renderPlot({
 
 # Table output for GLM
 
-output$GuildSpGLMtable <- renderTable({
-  req(glm_fit())
-  glm_summary <- summary(glm_fit())
-  anova_table <- as.data.frame(glm_summary$coefficients)
+output$GuildSptable <- renderTable({
+  req(guild_glm_fit())
+  guild_glm_summary <- summary(guild_glm_fit())
+  anova_table <- as.data.frame(guild_glm_summary$coefficients)
   anova_table
 })
+})
 }
+# Run the application
+shinyApp(ui, server)
