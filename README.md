@@ -33,11 +33,20 @@ Snippets from the app
 **Collaborators**
 
 Lima, W.E.,  
+
 Souza, C.F.S., 
+
 Markwith, H.S., 
+
 Paul, J.I., 
+
 Souza, J.C.S
+
 Undergraduate student of the Biological Sciences course at the Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS 
+
 Master's student at the Federal University of Uberlândia, PPGCV - Postgraduate Program in Veterinary Sciences - FAMEV – UFU 
+
 Prof. Holder, Florida Atlântica University – FAU, FL, USA 
+
 Prof. Holder, Federal University of Mato Grosso do Sul, CPAQ-UFMS, Aquidauana, MS
+
