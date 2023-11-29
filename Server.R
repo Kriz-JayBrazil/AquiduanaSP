@@ -35,6 +35,9 @@ server <- function(input, output, session) {
   
   #Map 2 logic
   
+  speciesNames <- names(brazil)[13:99]
+  
+  # Create a color factor for the sites
   colorBySite <- colorFactor(rainbow(length(unique(brazil$SITES))), brazil$SITES)
   
   observe({
@@ -46,9 +49,7 @@ server <- function(input, output, session) {
           lng = ~Long,
           color = ~colorBySite(SITES),
           popup = ~sapply(1:nrow(brazil), function(i) {
-            speciesNames <- names(brazil)[-c(1, which(names(brazil) == "Lat"), which(names(brazil) == "Long"))]
-            speciesNames <- setdiff(speciesNames, excludedSpecies)
-            
+            # Extract the counts for each species at each site
             speciesCountsForSite <- brazil[i, speciesNames]
             validSpeciesIndices <- which(speciesCountsForSite >= 1)
             validSpecies <- speciesNames[validSpeciesIndices]
@@ -72,39 +73,45 @@ server <- function(input, output, session) {
   
   #Map 3 logic
   
-  excludedSpecies <- c("piscivorous", "omnivorous", "nectarivore", "insectivorous", 
-                       "herbivore", "granivore", "frugivorous", "detritivore", 
-                       "carnivore", "Long", "Lat", "SITES")
+  # Sum of species counts (13:99) for each site
+  speciesNames <- names(brazil)[13:99]
+  brazil$totalSpeciesCount <- rowSums(brazil[, speciesNames], na.rm = TRUE)
   
-  brazil$richness <- apply(brazil[, !(names(brazil) %in% excludedSpecies)], 1, function(row) sum(row > 0))
-  
+  # Define maximum and minimum sizes for markers
   maxSize <- 50
   minSize <- 10
-  scaledRichness <- (brazil$richness - min(brazil$richness)) / (max(brazil$richness) - min(brazil$richness)) * (maxSize - minSize) + minSize
   
-  colorByRichness <- colorBin(palette = "viridis", bins = 5, domain = brazil$richness)
+  # Scale the total species count for marker sizes
+  scaledCounts <- (brazil$totalSpeciesCount - min(brazil$totalSpeciesCount)) / (max(brazil$totalSpeciesCount) - min(brazil$totalSpeciesCount)) * (maxSize - minSize) + minSize
   
+  # Create a color bin function for total species counts
+  colorByCounts <- colorBin(palette = "viridis", bins = 5, domain = brazil$totalSpeciesCount)
+  
+  # Render the Leaflet map with circle markers
   output$map3 <- renderLeaflet({
     leaflet(data = brazil) %>%
       addTiles() %>%
       addCircleMarkers(
         lat = ~Lat,
         lng = ~Long,
-        color = ~colorByRichness(richness), 
-        radius = ~scaledRichness, 
-        popup = ~paste0("Site: ", SITES, "<br>Species Richness: ", richness)
+        color = ~colorByCounts(totalSpeciesCount), 
+        radius = ~scaledCounts, 
+        popup = ~paste0("Site: ", SITES, "<br>Total Species Count: ", totalSpeciesCount)
       )
   })
   
-  
+  # Show modal dialog with instructions when the button is clicked
   observeEvent(input$show_instructions, {
     showModal(modalDialog(
       title = "Navigation Instructions",
-      "Use your mouse to pan and zoom on the map. Click the circles to see detailed information about each site's species richness.",
+      "Use your mouse to pan and zoom on the map. Click the circles to see detailed information about each site's total species count.",
       easyClose = TRUE,
       footer = NULL
     ))
   })
+  
+
+  
   
   #visualizations 
 #VIS 1
