@@ -47,7 +47,7 @@ ui <- dashboardPage(
       
       #Map 3
       tabPanel("Map 3",
-               titlePanel("Map Interaction: Species Richness by Site"),
+               titlePanel("Map Interaction: Species Abundance by Site"),
               fillPage(
                 leafletOutput("map3", width = "100%", height = "100vh"),
                 absolutePanel(top = 10, right = 10, 
